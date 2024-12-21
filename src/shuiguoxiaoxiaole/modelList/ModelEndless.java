@@ -8,6 +8,10 @@ package shuiguoxiaoxiaole.modelList;
  *
  */
 public class ModelEndless implements Model {
+    // 添加地图大小常量
+    private static final int LEFT = 10;
+    private static final int RIGHT = 10;
+    
     private int score;  // 玩家得分
     private int[][] map;  // 游戏地图
 
@@ -51,7 +55,7 @@ public class ModelEndless implements Model {
     /**
      * 返回当前地图
      *
-     * @return 当前地图数组
+     * @return 当前地图��组
      */
     @Override
     public int[][] getMapNow() {
@@ -65,17 +69,8 @@ public class ModelEndless implements Model {
      */
     @Override
     public int[][] getMapZero() {
-        modelNormal.generateMap();
-        int i = 99999;
-        while (true) {
-            i = modelNormal.checkMap();
-            if (i == -1) {
-                modelNormal.setScore(0);
-                return modelNormal.getMap();
-            } else {
-                modelNormal.dropBlock();
-            }
-        }
+        modelNormal.generateMap();  // 使用 ModelNormal 的方法生成地图
+        return modelNormal.getMap();  // 直接返回生成的地图
     }
 
     /**
@@ -106,13 +101,18 @@ public class ModelEndless implements Model {
     }
 
     /**
-     * 返回交换检查后的数值，详见“数据结构.md”
+     * 返回交换检查后的数值，详见"数据结构.md"
      * 如果返回消去检查后的地图,请直接getMapNow
      *
      * @return 交换检查结果
      */
     @Override
     public int getMapJudge() {
+        // 添加边界检查
+        int[][] map = modelNormal.getMap();
+        if (map == null || map.length == 0 || map[0].length == 0) {
+            return -1;
+        }
         return modelNormal.checkMap();
     }
 
@@ -174,7 +174,7 @@ public class ModelEndless implements Model {
      */
     @Override
     public int calculateCoins() {
-        // 假设每 100 分转换为 1 枚金币
+        // 假设每 100 分转换为 1 枚金��
         return modelNormal.getScore() / 100;
     }
 
@@ -237,5 +237,17 @@ public class ModelEndless implements Model {
      */
     public void setIs(boolean is) {
         this.is = is;
+    }
+
+    // 添加生成地图的方法
+    private void generateMap() {
+        for (int i = 0; i < LEFT; i++) {
+            for (int j = 0; j < RIGHT; j++) {
+                map[i][j] = ((int) (Math.random() * 4) + 1) * 10000000;
+                while (map[i][j] == 0) {
+                    map[i][j] = ((int) (Math.random() * 4) + 1) * 10000000;
+                }
+            }
+        }
     }
 }

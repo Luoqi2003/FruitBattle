@@ -12,6 +12,11 @@ import javafx.scene.layout.AnchorPane;
 import shuiguoxiaoxiaole.physics.PhysicsManager;
 
 import java.util.Optional;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+import java.util.Random;
+import javafx.scene.layout.Pane;
 
 /**
  * @author Mxkn
@@ -42,32 +47,53 @@ public class IndexController {
     private AnchorPane rootPane;
 
     @FXML
+    private AnchorPane fruitPane;
+
+    @FXML
+    public void initialize() {
+        // 在初始化时设置物理系统的游戏面板
+        PhysicsManager physicsManager = PhysicsManager.getInstance();
+        physicsManager.setGamePane(fruitPane);
+        
+        // 创建Timeline用于定时生成水果
+        Random random = new Random();
+        Timeline fruitDropTimeline = new Timeline(
+            new KeyFrame(Duration.seconds(2), event -> {
+                int fruitCount = random.nextInt(3) + 1;
+                for (int i = 0; i < fruitCount; i++) {
+                    double x = random.nextDouble() * (Director.WIDTH - 40);
+                    physicsManager.addElementWithRandomFruit(x, 0);
+                }
+            })
+        );
+        
+        fruitDropTimeline.setCycleCount(Timeline.INDEFINITE);
+        physicsManager.start();
+        fruitDropTimeline.play();
+    }
+
+    @FXML
     void mouseClickedPersonInf() {
-        handleMouseClick(null);
         Director.getInstance().toPersonInf();
     }
 
     @FXML
     void mouseClickedSetting() {
-        handleMouseClick(null);
         Director.getInstance().toSetting();
     }
 
     @FXML
     void mouseClickedHelp() {
-        handleMouseClick(null);
         Director.getInstance().toHelpSelect();
     }
 
     @FXML
     void mouseClickedAboutus() {
-        handleMouseClick(null);
         Director.getInstance().toAboutUs();
     }
 
     @FXML
     void mouseClickedStartGame() {
-        handleMouseClick(null);
         Director.getInstance().toModelSelect();
     }
 
@@ -153,15 +179,23 @@ public class IndexController {
     }
 
     @FXML
-    private void handleMouseClick(MouseEvent event) {
-        if (event != null) {
-            PhysicsManager.getInstance().addElement(
-                "image/button/index/gameStart.png",
-                event.getX(),
-                event.getY()
-            );
-            SoundEffect.play1();
+    public void handleMouseClick(MouseEvent event) {
+        if (event == null) {
+            return;
         }
+        
+        // 获取物理系统管理器
+        PhysicsManager physicsManager = PhysicsManager.getInstance();
+        
+        // 获取鼠标点击位置
+        double x = event.getX();
+        double y = event.getY();
+        
+        // 添加水果到物理系统
+        physicsManager.addElementWithRandomFruit(x, y);
+        
+        // 播放音效
+        SoundEffect.play1();        
     }
 
 }

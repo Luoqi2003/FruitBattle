@@ -5,6 +5,9 @@ import javafx.scene.layout.AnchorPane;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.io.File;
+import java.net.URL;
+import java.util.Arrays;
 
 public class PhysicsManager {
     private static PhysicsManager instance = new PhysicsManager();
@@ -33,6 +36,21 @@ public class PhysicsManager {
         PhysicsElement element = new PhysicsElement(imagePath, x, y);
         elements.add(element);
         gamePane.getChildren().add(element.getImageView());
+    }
+
+    public void addElementWithRandomFruit(double x, double y) {
+        List<String> fruitImages = Arrays.asList("/image/click/1.png", "/image/click/2.png");
+        if (!fruitImages.isEmpty()) {
+            int randomIndex = (int)(Math.random() * fruitImages.size());
+            String imagePath = fruitImages.get(randomIndex);
+            addElement(imagePath, x, y);
+        }
+    }
+
+    public void changeElementImage(int index, String newImagePath) {
+        if (index >= 0 && index < elements.size()) {
+            elements.get(index).changeImage(newImagePath);
+        }
     }
 
     private void update() {

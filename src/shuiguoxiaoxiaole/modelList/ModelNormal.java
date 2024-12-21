@@ -178,12 +178,11 @@ public class ModelNormal {
      * @return void
      */
     public void swapBlock(int a1, int a2, int b1, int b2) {
-
         if (map[a1][a2] < 0 || map[b1][b2] < 0)
             return;
         int temp = map[a1][a2];
         map[a1][a2] = map[b1][b2];
-        map[b1][b1] = temp;
+        map[b1][b2] = temp;
     }
 
     /**
@@ -278,18 +277,24 @@ public class ModelNormal {
     }
 
     /**
-     * 数组检查是否可以消去
+     * 数组检查是否可消去
      * @param
      * @return int
      */
     public int checkMap() {
-
-        //T连检查
+        if (map == null || map.length == 0) {
+            return -1;
+        }
+        
+        // T连检查
         for (int i = 0; i < LEFT; i++) {
             for (int j = 0; j < RIGHT - 4; j++) {
+                if (i < 0 || j < 0 || i >= LEFT || j >= RIGHT - 4) {
+                    continue;
+                }
                 if (map[i][j] <= 0 || map[i][j + 1] <= 0 || map[i][j + 2] <= 0 ||
                         map[i][j + 3] <= 0 || map[i][j + 4] <= 0) {
-                    break;
+                    continue;
                 }
                 if (map[i][j] == map[i][j + 1] && map[i][j] == map[i][j + 2] &&
                         map[i][j] == map[i][j + 3] && map[i][j] == map[i][j + 4]) {

@@ -86,14 +86,23 @@ public class CardList {
      */
     public void initEndlessMap() {
         map = modelEndless.getMapZero();
+        if (map == null) {
+            map = new int[10][10];
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 10; j++) {
+                    map[i][j] = ((int) (Math.random() * 4) + 1) * 10000000;
+                }
+            }
+        }
+        initCard();  // 初始化卡片
     }
 
     //生成初始卡片
     public void initCard() {
-
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                //Math.random()*5
+        if (map == null) return;
+        
+        for (int i = 0; i < Math.min(10, map.length); i++) {
+            for (int j = 0; j < Math.min(10, map[i].length); j++) {
                 Card card = new Card(290 + j * 46, 70 + i * 46, map[i][j]);
                 cards[i][j] = card;
             }
@@ -210,7 +219,7 @@ public class CardList {
 
     /**
      * 无尽模式
-     * 交换两个卡片，
+     * 交换两个片，
      *@param moveRight, moveDown
      *@return int
      */
@@ -279,7 +288,6 @@ public class CardList {
      *@return int[]
      */
     public int[] dealMouse(double x, double y) {
-
         int[] move = new int[2];
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -297,42 +305,45 @@ public class CardList {
                     x2 = i;
                     y2 = j;
                     selected = 0;
-                    if (y1 == y2) {
-                        if (x1 + 1 == x2) {
-                            move[1] = 1;//向下
-                            System.out.println("向下");
-                        } else if (x1 - 1 == x2) {
-                            move[1] = -1;//向上
-                            System.out.println("向上");
+                    if (x1 >= 0 && x1 < 10 && y1 >= 0 && y1 < 10 && 
+                        x2 >= 0 && x2 < 10 && y2 >= 0 && y2 < 10) {
+                        if (y1 == y2) {
+                            if (x1 + 1 == x2) {
+                                move[1] = 1;//向下
+                                System.out.println("向下");
+                            } else if (x1 - 1 == x2) {
+                                move[1] = -1;//向上
+                                System.out.println("向上");
+                            } else if (x1 == x2) {
+                                x1 = 10;
+                                x2 = 10;
+                                y1 = 10;
+                                y2 = 10;
+                            } else {
+                                x1 = 10;
+                                x2 = 10;
+                                y1 = 10;
+                                y2 = 10;
+                            }
                         } else if (x1 == x2) {
-                            x1 = 10;
-                            x2 = 10;
-                            y1 = 10;
-                            y2 = 10;
+                            if (y1 + 1 == y2) {
+                                move[0] = 1;//向右
+                                System.out.println("向右");
+                            } else if (y1 - 1 == y2) {
+                                move[0] = -1;//向左
+                                System.out.println("向左");
+                            } else {
+                                x1 = 10;
+                                x2 = 10;
+                                y1 = 10;
+                                y2 = 10;
+                            }
                         } else {
                             x1 = 10;
                             x2 = 10;
                             y1 = 10;
                             y2 = 10;
                         }
-                    } else if (x1 == x2) {
-                        if (y1 + 1 == y2) {
-                            move[0] = 1;//向右
-                            System.out.println("向右");
-                        } else if (y1 - 1 == y2) {
-                            move[0] = -1;//向左
-                            System.out.println("向左");
-                        } else {
-                            x1 = 10;
-                            x2 = 10;
-                            y1 = 10;
-                            y2 = 10;
-                        }
-                    } else {
-                        x1 = 10;
-                        x2 = 10;
-                        y1 = 10;
-                        y2 = 10;
                     }
                     System.out.println("第二次记点");
                     System.out.println(x2 + "  " + y2);
@@ -345,7 +356,7 @@ public class CardList {
     }
 
     /**
-     * 返回交换检查后的数值，详见“数据结构.md”
+     * 返回交换检查后的数值，详见"数据结构.md"
      *@param
      *@return int
      */

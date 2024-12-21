@@ -16,7 +16,7 @@ public class PhysicsElement {
     private static final double SIZE = 40;
 
     public PhysicsElement(String imagePath, double startX, double startY) {
-        Image image = new Image(getClass().getClassLoader().getResourceAsStream(imagePath));
+        Image image = new Image(PhysicsElement.class.getResourceAsStream(imagePath));
         imageView = new ImageView(image);
         imageView.setFitWidth(SIZE);
         imageView.setFitHeight(SIZE);
@@ -92,4 +92,10 @@ public class PhysicsElement {
     public void setVY(double vy) { this.vy = vy; }
     public ImageView getImageView() { return imageView; }
     public boolean isAlive() { return isAlive; }
+
+    // 在 PhysicsElement 类中添加一个更改图片的方法
+    public void changeImage(String imagePath) {
+        Image newImage = new Image(getClass().getClassLoader().getResourceAsStream(imagePath));
+        imageView.setImage(newImage);
+    }
 } 

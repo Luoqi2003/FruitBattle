@@ -10,6 +10,7 @@
    <ImageView fitHeight="600" fitWidth="800" pickOnBounds="true" preserveRatio="true">
       <Image url="@../image/background/index.png"/>
    </ImageView>
+   <AnchorPane fx:id="fruitPane" prefHeight="600" prefWidth="800" onMouseClicked="#handleMouseClick"/>
    <ImageView fx:id="startGame" fitHeight="100.0" fitWidth="200.0" layoutX="156.0" layoutY="274.0"
               onMouseClicked="#mouseClickedStartGame" onMouseEntered="#mouseEnterStartGame"
               onMouseExited="#mouseExitedStartGame" pickOnBounds="true" preserveRatio="true">
